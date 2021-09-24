@@ -250,7 +250,7 @@ type Descendant struct {
 // The returned graph.Edge is a multi.Edge if an edge exists.
 func (g *Graph) Edge(uid, vid int64) graph.Edge {
 	l := g.Lines(uid, vid)
-	if l == nil {
+	if l == graph.Empty {
 		return nil
 	}
 	return multi.Edge{F: g.Node(uid), T: g.Node(vid), Lines: l}
