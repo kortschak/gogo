@@ -6,7 +6,6 @@ package gogo
 
 import (
 	"reflect"
-	"sort"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -59,8 +58,8 @@ func TestQueryAnd(t *testing.T) {
 			b := Query{terms: permutedTerms(test.b, src)}
 
 			got := a.And(b).Result()
-			sort.Sort(byID(got))
-			sort.Sort(byID(test.want))
+			sortByID(got)
+			sortByID(test.want)
 
 			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("unexpected result for test %q:\ngot: %v\nwant:%v",
@@ -115,8 +114,8 @@ func TestQueryOr(t *testing.T) {
 			b := Query{terms: permutedTerms(test.b, src)}
 
 			got := a.Or(b).Result()
-			sort.Sort(byID(got))
-			sort.Sort(byID(test.want))
+			sortByID(got)
+			sortByID(test.want)
 
 			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("unexpected result for test %q:\ngot: %v\nwant:%v",
@@ -171,8 +170,8 @@ func TestQueryNot(t *testing.T) {
 			b := Query{terms: permutedTerms(test.b, src)}
 
 			got := a.Not(b).Result()
-			sort.Sort(byID(got))
-			sort.Sort(byID(test.want))
+			sortByID(got)
+			sortByID(test.want)
 
 			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("unexpected result for test %q:\ngot: %v\nwant:%v",
@@ -211,8 +210,8 @@ func TestQueryUnique(t *testing.T) {
 			a := Query{terms: permutedTerms(test.in, src)}
 
 			got := a.Unique().Result()
-			sort.Sort(byID(got))
-			sort.Sort(byID(test.want))
+			sortByID(got)
+			sortByID(test.want)
 
 			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("unexpected result for test %q:\ngot: %v\nwant:%v",

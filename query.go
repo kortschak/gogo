@@ -58,8 +58,8 @@ func (q Query) And(p Query) Query {
 	if q.g != p.g {
 		panic("gogo: binary query operation parameters from distinct graphs")
 	}
-	sort.Sort(byID(q.terms))
-	sort.Sort(byID(p.terms))
+	sortByID(q.terms)
+	sortByID(p.terms)
 	r := Query{g: q.g}
 	var i, j int
 	for i < len(q.terms) && j < len(p.terms) {
@@ -84,8 +84,8 @@ func (q Query) Or(p Query) Query {
 	if q.g != p.g {
 		panic("gogo: binary query operation parameters from distinct graphs")
 	}
-	sort.Sort(byID(q.terms))
-	sort.Sort(byID(p.terms))
+	sortByID(q.terms)
+	sortByID(p.terms)
 	r := Query{g: q.g}
 	var i, j int
 	for i < len(q.terms) && j < len(p.terms) {
@@ -120,8 +120,8 @@ func (q Query) Not(p Query) Query {
 	if q.g != p.g {
 		panic("gogo: binary query operation parameters from distinct graphs")
 	}
-	sort.Sort(byID(q.terms))
-	sort.Sort(byID(p.terms))
+	sortByID(q.terms)
+	sortByID(p.terms)
 	r := Query{g: q.g}
 	var i, j int
 	for i < len(q.terms) && j < len(p.terms) {
@@ -153,7 +153,7 @@ func min(a, b int) int {
 // Unique returns a copy of the receiver that contains only one instance
 // of each term.
 func (q Query) Unique() Query {
-	sort.Sort(byID(q.terms))
+	sortByID(q.terms)
 	r := Query{g: q.g}
 	for i, t := range q.terms {
 		if i == 0 || t.UID != q.terms[i-1].UID {
@@ -168,8 +168,6 @@ func (q Query) Result() []rdf.Term {
 	return q.terms
 }
 
-type byID []rdf.Term
-
-func (n byID) Len() int           { return len(n) }
-func (n byID) Less(i, j int) bool { return n[i].ID() < n[j].ID() }
-func (n byID) Swap(i, j int)      { n[i], n[j] = n[j], n[i] }
+func sortByID(terms []rdf.Term) {
+	sort.Slice(terms, func(i, j int) bool { return terms[i].ID() < terms[j].ID() })
+}
